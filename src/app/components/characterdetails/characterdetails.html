@@ -1,1 +1,55 @@
-<p>characterdetails works!</p>
+<div class="container">
+  <a mat-button routerLink="/">← Back to All Characters</a>
+
+  @if (isLoading()) {
+    <div class="spinner-container">
+      <mat-progress-spinner mode="indeterminate" />
+    </div>
+  }
+
+  @if (hasError()) {
+    <p class="error">Failed to load character details.</p>
+  }
+
+  @if (!isLoading() && character()) {
+    <mat-card class="detail-card">
+      <div class="detail-layout">
+        <div class="image-section">
+          @if (character()!.image) {
+            <img [src]="character()!.image" [alt]="character()!.name" class="detail-img" />
+          } @else {
+            <div class="no-image">No Image</div>
+          }
+        </div>
+
+        <div class="info-section">
+          <h2 class="character-name">{{ character()!.name }}</h2>
+
+          <p><strong>House: </strong>
+            @switch (character()!.house) {
+              @case ('Gryffindor') { <span class="gryffindor">Gryffindor</span> }
+              @case ('Slytherin') { <span class="slytherin">Slytherin</span> }
+              @case ('Hufflepuff') { <span class="hufflepuff">Hufflepuff</span> }
+              @case ('Ravenclaw') { <span class="ravenclaw">Ravenclaw</span> }
+              @default { <span class="no-house">No House</span> }
+            }
+          </p>
+
+          <p><strong>Species:</strong> {{ character()!.species }}</p>
+          <p><strong>Actor:</strong> {{ character()!.actor }}</p>
+          <p><strong>Wizard:</strong> {{ character()!.wizard ? 'Yes' : 'No' }}</p>
+          <p><strong>Ancestry:</strong> {{ character()!.ancestry || 'Unknown' }}</p>
+          <p><strong>Patronus:</strong> {{ character()!.patronus || 'Unknown' }}</p>
+          <p><strong>Alive:</strong> {{ character()!.alive ? 'Yes' : 'No' }}</p>
+
+          <div class="wand-section">
+            <h3>Wand</h3>
+            <p><strong>Wood:</strong> {{ character()!.wand?.wood || 'Unknown' }}</p>
+            <p><strong>Core:</strong> {{ character()!.wand?.core || 'Unknown' }}</p>
+            <p><strong>Length:</strong> {{ character()!.wand?.length || 'Unknown' }}</p>
+          </div>
+        </div>
+      </div>
+    </mat-card>
+  }
+</div>

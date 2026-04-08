@@ -1,1 +1,48 @@
-<p>characterfilter works!</p>
+<div class="container">
+  <h2>Filter by House</h2>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Select a House</mat-label>
+    <mat-select (selectionChange)="onHouseChange($event.value)">
+      @for (house of houses; track house) {
+        <mat-option [value]="house">{{ house }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+
+  @if (isLoading()) {
+    <div class="spinner-container">
+      <mat-progress-spinner mode="indeterminate" />
+    </div>
+  }
+
+  @if (!isLoading() && selectedHouse() && characters().length === 0) {
+    <p class="no-results">No characters found for {{ selectedHouse() }}.</p>
+  }
+
+  @if (!isLoading() && characters().length > 0) {
+    <div class="grid">
+      @for (character of characters(); track character.id) {
+        <mat-card class="character-card" [routerLink]="['/character', character.id]">
+          @if (character.image) {
+            <img [src]="character.image" [alt]="character.name" class="character-img" />
+          } @else {
+            <div class="no-image">No Image</div>
+          }
+          <mat-card-content>
+            <h3>{{ character.name }}</h3>
+            <p class="actor">Actor: {{ character.actor }}</p>
+            @switch (character.house) {
+              @case ('Gryffindor') { <span class="house gryffindor">Gryffindor</span> }
+              @case ('Slytherin') { <span class="house slytherin">Slytherin</span> }
+              @case ('Hufflepuff') { <span class="house hufflepuff">Hufflepuff</span> }
+              @case ('Ravenclaw') { <span class="house ravenclaw">Ravenclaw</span> }
+              @default { <span class="house no-house">No House</span> }
+            }
+          </mat-card-content>
+        </mat-card>
+      }
+    </div>
+  }
+
+</div>
